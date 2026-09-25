@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'router.dart';
 import 'theme.dart';
+import '../features/master_data/application/master_data_store.dart';
+import '../features/master_data/presentation/master_data_page.dart';
 
 class CosplayDiaryApp extends StatelessWidget {
   const CosplayDiaryApp({super.key});
@@ -24,11 +26,20 @@ class AppShell extends StatefulWidget {
 
 class _AppShellState extends State<AppShell> {
   int _index = 0;
+  final _masterStore = MasterDataStore();
+
+  @override
+  void dispose() {
+    _masterStore.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final wide = MediaQuery.sizeOf(context).width >= 600;
-    final body = PlaceholderFeaturePage(title: pageTitles[_index]);
+    final body = _index == 2
+        ? MasterDataPage(store: _masterStore)
+        : PlaceholderFeaturePage(title: pageTitles[_index]);
     final content = wide
         ? Row(children: [
             NavigationRail(
