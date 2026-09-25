@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'router.dart';
 import 'theme.dart';
 import '../features/master_data/application/master_data_store.dart';
-import '../features/master_data/presentation/master_data_page.dart';
 import '../features/diary/application/diary_store.dart';
 import '../features/diary/presentation/diary_pages.dart';
+import '../features/contact_lenses/application/lens_store.dart';
+import '../features/master_data/presentation/management_page.dart';
 
 class CosplayDiaryApp extends StatelessWidget {
   const CosplayDiaryApp({super.key});
@@ -30,11 +31,13 @@ class _AppShellState extends State<AppShell> {
   int _index = 0;
   final _masterStore = MasterDataStore();
   final _diaryStore = DiaryStore();
+  final _lensStore = LensStore();
 
   @override
   void dispose() {
     _masterStore.dispose();
     _diaryStore.dispose();
+    _lensStore.dispose();
     super.dispose();
   }
 
@@ -44,7 +47,7 @@ class _AppShellState extends State<AppShell> {
     final body = switch (_index) {
       0 => CalendarPage(store: _diaryStore, masterStore: _masterStore),
       1 => DiaryListPage(store: _diaryStore, masterStore: _masterStore),
-      2 => MasterDataPage(store: _masterStore),
+      2 => ManagementPage(masterStore: _masterStore, lensStore: _lensStore),
       _ => PlaceholderFeaturePage(title: pageTitles[_index]),
     };
     final content = wide
