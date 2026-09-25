@@ -7,6 +7,7 @@ import '../features/diary/application/diary_store.dart';
 import '../features/diary/presentation/diary_pages.dart';
 import '../features/contact_lenses/application/lens_store.dart';
 import '../features/master_data/presentation/management_page.dart';
+import '../features/dashboard/presentation/dashboard_page.dart';
 
 class CosplayDiaryApp extends StatelessWidget {
   const CosplayDiaryApp({super.key});
@@ -48,6 +49,7 @@ class _AppShellState extends State<AppShell> {
       0 => CalendarPage(store: _diaryStore, masterStore: _masterStore),
       1 => DiaryListPage(store: _diaryStore, masterStore: _masterStore),
       2 => ManagementPage(masterStore: _masterStore, lensStore: _lensStore),
+      3 => DashboardPage(diaryStore: _diaryStore, lensStore: _lensStore),
       _ => PlaceholderFeaturePage(title: pageTitles[_index]),
     };
     final content = wide
