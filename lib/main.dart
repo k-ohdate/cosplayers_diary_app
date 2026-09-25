@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'app/app.dart';
+import 'core/database/app_database.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const CosplayDiaryApp());
+  final database = await AppDatabase.openDefault();
+  runApp(CosplayDiaryApp(database: database));
 }

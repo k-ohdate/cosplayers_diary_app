@@ -17,22 +17,28 @@ class BackupManifest {
   final int imageCount;
 
   Map<String, Object> toJson() => {
-        'formatVersion': formatVersion,
-        'createdAt': createdAt.toUtc().toIso8601String(),
-        'dataCounts': dataCounts,
-        'imageCount': imageCount,
-      };
+    'formatVersion': formatVersion,
+    'createdAt': createdAt.toUtc().toIso8601String(),
+    'dataCounts': dataCounts,
+    'imageCount': imageCount,
+  };
 
   factory BackupManifest.fromJson(Map<String, Object?> json) => BackupManifest(
-        formatVersion: json['formatVersion'] as int,
-        createdAt: DateTime.parse(json['createdAt'] as String),
-        dataCounts: (json['dataCounts'] as Map<String, Object?>).map((key, value) => MapEntry(key, value as int)),
-        imageCount: json['imageCount'] as int,
-      );
+    formatVersion: json['formatVersion'] as int,
+    createdAt: DateTime.parse(json['createdAt'] as String),
+    dataCounts: (json['dataCounts'] as Map<String, Object?>).map(
+      (key, value) => MapEntry(key, value as int),
+    ),
+    imageCount: json['imageCount'] as int,
+  );
 }
 
 class BackupInspection {
-  const BackupInspection({required this.errors, required this.files, this.manifest});
+  const BackupInspection({
+    required this.errors,
+    required this.files,
+    this.manifest,
+  });
   final List<String> errors;
   final Map<String, Uint8List> files;
   final BackupManifest? manifest;
@@ -65,7 +71,12 @@ class BackupService {
       dataCounts: counts,
       imageCount: imageCount,
     );
-    archive.add(ArchiveFile.string('manifest.json', const JsonEncoder.withIndent('  ').convert(manifest.toJson())));
+    archive.add(
+      ArchiveFile.string(
+        'manifest.json',
+        const JsonEncoder.withIndent('  ').convert(manifest.toJson()),
+      ),
+    );
     return ZipEncoder().encodeBytes(archive);
   }
 
@@ -94,13 +105,18 @@ class BackupService {
       if (manifestBytes == null) {
         errors.add('manifest.json がありません');
       } else {
-        final decoded = jsonDecode(utf8.decode(manifestBytes)) as Map<String, Object?>;
+        final decoded =
+            jsonDecode(utf8.decode(manifestBytes)) as Map<String, Object?>;
         manifest = BackupManifest.fromJson(decoded);
         if (manifest.formatVersion != currentVersion) {
           errors.add('未対応のバックアップ形式バージョンです: ${manifest.formatVersion}');
         }
-        final actualImages = files.keys.where((name) => name.startsWith('images/')).length;
-        if (actualImages != manifest.imageCount) errors.add('画像件数が manifest と一致しません');
+        final actualImages = files.keys
+            .where((name) => name.startsWith('images/'))
+            .length;
+        if (actualImages != manifest.imageCount) {
+          errors.add('画像件数が manifest と一致しません');
+        }
       }
     } catch (error) {
       errors.add('ZIPを読み取れません: $error');
@@ -109,13 +125,23 @@ class BackupService {
   }
 
   bool _isSafePath(String value) {
-    if (value.isEmpty || value.startsWith('/') || RegExp(r'^[A-Za-z]:').hasMatch(value)) return false;
+    if (value.isEmpty ||
+        value.startsWith('/') ||
+        RegExp(r'^[A-Za-z]:').hasMatch(value)) {
+      return false;
+    }
     final normalized = path.posix.normalize(value);
-    return normalized != '..' && !normalized.startsWith('../') && normalized == value;
+    return normalized != '..' &&
+        !normalized.startsWith('../') &&
+        normalized == value;
   }
 
   int _csvDataRows(Uint8List bytes) {
-    final lines = utf8.decode(bytes, allowMalformed: true).split(RegExp(r'\r?\n')).where((line) => line.isNotEmpty).length;
+    final lines = utf8
+        .decode(bytes, allowMalformed: true)
+        .split(RegExp(r'\r?\n'))
+        .where((line) => line.isNotEmpty)
+        .length;
     return lines > 0 ? lines - 1 : 0;
   }
 }

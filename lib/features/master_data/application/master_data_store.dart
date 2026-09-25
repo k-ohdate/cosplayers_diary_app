@@ -8,7 +8,8 @@ class MasterDataStore extends ChangeNotifier {
   final List<Costume> costumes = [];
   int _sequence = 0;
 
-  String _id(String prefix) => '$prefix-${DateTime.now().microsecondsSinceEpoch}-${_sequence++}';
+  String _id(String prefix) =>
+      '$prefix-${DateTime.now().microsecondsSinceEpoch}-${_sequence++}';
 
   Genre addGenre(String name, {String memo = ''}) {
     final value = Genre(id: _id('genre'), name: name.trim(), memo: memo.trim());
@@ -17,14 +18,28 @@ class MasterDataStore extends ChangeNotifier {
     return value;
   }
 
-  CosplayCharacter addCharacter(String genreId, String name, {String memo = ''}) {
-    final value = CosplayCharacter(id: _id('character'), genreId: genreId, name: name.trim(), memo: memo.trim());
+  CosplayCharacter addCharacter(
+    String genreId,
+    String name, {
+    String memo = '',
+  }) {
+    final value = CosplayCharacter(
+      id: _id('character'),
+      genreId: genreId,
+      name: name.trim(),
+      memo: memo.trim(),
+    );
     characters.add(value);
     notifyListeners();
     return value;
   }
 
-  Costume addCostume(String name, {required bool isGeneral, String? characterId, String memo = ''}) {
+  Costume addCostume(
+    String name, {
+    required bool isGeneral,
+    String? characterId,
+    String memo = '',
+  }) {
     final value = Costume(
       id: _id('costume'),
       name: name.trim(),
@@ -37,9 +52,12 @@ class MasterDataStore extends ChangeNotifier {
     return value;
   }
 
-  void archiveGenre(String id) => _replaceGenre(id, (value) => value.copyWith(archived: true));
-  void archiveCharacter(String id) => _replaceCharacter(id, (value) => value.copyWith(archived: true));
-  void archiveCostume(String id) => _replaceCostume(id, (value) => value.copyWith(archived: true));
+  void archiveGenre(String id) =>
+      _replaceGenre(id, (value) => value.copyWith(archived: true));
+  void archiveCharacter(String id) =>
+      _replaceCharacter(id, (value) => value.copyWith(archived: true));
+  void archiveCostume(String id) =>
+      _replaceCostume(id, (value) => value.copyWith(archived: true));
 
   void _replaceGenre(String id, Genre Function(Genre) update) {
     final index = genres.indexWhere((e) => e.id == id);
@@ -47,7 +65,10 @@ class MasterDataStore extends ChangeNotifier {
     notifyListeners();
   }
 
-  void _replaceCharacter(String id, CosplayCharacter Function(CosplayCharacter) update) {
+  void _replaceCharacter(
+    String id,
+    CosplayCharacter Function(CosplayCharacter) update,
+  ) {
     final index = characters.indexWhere((e) => e.id == id);
     if (index >= 0) characters[index] = update(characters[index]);
     notifyListeners();

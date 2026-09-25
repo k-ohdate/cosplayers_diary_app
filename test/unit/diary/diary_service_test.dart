@@ -25,23 +25,51 @@ void main() {
 
   test('entries on the same date are all returned', () {
     final entries = [
-      DiaryEntry(id: 'd1', activityDate: DateTime(2026, 2, 1, 9), activityType: ActivityType.cosplay, genreId: 'g', characterId: 'c', costumeId: 's'),
-      DiaryEntry(id: 'd2', activityDate: DateTime(2026, 2, 1, 18), activityType: ActivityType.photographer),
-      DiaryEntry(id: 'd3', activityDate: DateTime(2026, 2, 2), activityType: ActivityType.other),
+      DiaryEntry(
+        id: 'd1',
+        activityDate: DateTime(2026, 2, 1, 9),
+        activityType: ActivityType.cosplay,
+        genreId: 'g',
+        characterId: 'c',
+        costumeId: 's',
+      ),
+      DiaryEntry(
+        id: 'd2',
+        activityDate: DateTime(2026, 2, 1, 18),
+        activityType: ActivityType.photographer,
+      ),
+      DiaryEntry(
+        id: 'd3',
+        activityDate: DateTime(2026, 2, 2),
+        activityType: ActivityType.other,
+      ),
     ];
-    expect(service.onDate(entries, DateTime(2026, 2, 1)).map((e) => e.id), ['d1', 'd2']);
+    expect(service.onDate(entries, DateTime(2026, 2, 1)).map((e) => e.id), [
+      'd1',
+      'd2',
+    ]);
   });
 
-  test('duplicate clears usage and identity while keeping cosplay selections', () {
-    final source = DiaryEntry(
-      id: 'd1',
-      activityDate: DateTime(2026, 2, 1),
-      activityType: ActivityType.cosplay,
-      genreId: 'g', characterId: 'c', costumeId: 's', lensInventoryId: 'i1',
-    );
-    final copy = service.duplicate(source, id: 'd2', date: DateTime(2026, 3, 1));
-    expect(copy.id, 'd2');
-    expect(copy.lensInventoryId, isNull);
-    expect(copy.characterId, 'c');
-  });
+  test(
+    'duplicate clears usage and identity while keeping cosplay selections',
+    () {
+      final source = DiaryEntry(
+        id: 'd1',
+        activityDate: DateTime(2026, 2, 1),
+        activityType: ActivityType.cosplay,
+        genreId: 'g',
+        characterId: 'c',
+        costumeId: 's',
+        lensInventoryId: 'i1',
+      );
+      final copy = service.duplicate(
+        source,
+        id: 'd2',
+        date: DateTime(2026, 3, 1),
+      );
+      expect(copy.id, 'd2');
+      expect(copy.lensInventoryId, isNull);
+      expect(copy.characterId, 'c');
+    },
+  );
 }

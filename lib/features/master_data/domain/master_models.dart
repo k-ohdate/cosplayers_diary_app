@@ -1,16 +1,21 @@
 class Genre {
-  const Genre({required this.id, required this.name, this.memo = '', this.archived = false});
+  const Genre({
+    required this.id,
+    required this.name,
+    this.memo = '',
+    this.archived = false,
+  });
   final String id;
   final String name;
   final String memo;
   final bool archived;
 
   Genre copyWith({String? name, String? memo, bool? archived}) => Genre(
-        id: id,
-        name: name ?? this.name,
-        memo: memo ?? this.memo,
-        archived: archived ?? this.archived,
-      );
+    id: id,
+    name: name ?? this.name,
+    memo: memo ?? this.memo,
+    archived: archived ?? this.archived,
+  );
 }
 
 class CosplayCharacter {
@@ -31,7 +36,8 @@ class CosplayCharacter {
   final String? defaultLensProductId;
   final bool archived;
 
-  CosplayCharacter copyWith({String? name, String? memo, bool? archived}) => CosplayCharacter(
+  CosplayCharacter copyWith({String? name, String? memo, bool? archived}) =>
+      CosplayCharacter(
         id: id,
         genreId: genreId,
         name: name ?? this.name,
@@ -59,11 +65,11 @@ class Costume {
   final bool archived;
 
   Costume copyWith({String? name, String? memo, bool? archived}) => Costume(
-        id: id,
-        name: name ?? this.name,
-        isGeneral: isGeneral,
-        characterId: characterId,
-        memo: memo ?? this.memo,
-        archived: archived ?? this.archived,
-      );
+    id: id,
+    name: name ?? this.name,
+    isGeneral: isGeneral,
+    characterId: characterId,
+    memo: memo ?? this.memo,
+    archived: archived ?? this.archived,
+  );
 }

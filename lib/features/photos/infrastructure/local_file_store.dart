@@ -37,7 +37,8 @@ class LocalFileStore implements FileStore {
   }
 
   @override
-  Future<Uint8List> read(String relativePath) => _file(relativePath).readAsBytes();
+  Future<Uint8List> read(String relativePath) =>
+      _file(relativePath).readAsBytes();
 
   @override
   Future<String> save(String relativePath, Uint8List bytes) async {

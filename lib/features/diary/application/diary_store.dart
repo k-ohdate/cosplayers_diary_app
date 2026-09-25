@@ -9,7 +9,8 @@ class DiaryStore extends ChangeNotifier {
   final List<DiaryEntry> entries = [];
   int _sequence = 0;
 
-  String nextId() => 'diary-${DateTime.now().microsecondsSinceEpoch}-${_sequence++}';
+  String nextId() =>
+      'diary-${DateTime.now().microsecondsSinceEpoch}-${_sequence++}';
 
   void save(DiaryEntry entry) {
     final errors = service.validate(entry);

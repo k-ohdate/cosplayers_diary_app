@@ -11,21 +11,37 @@ void main() {
   final characters = [
     const CosplayCharacter(id: 'c1', genreId: 'g1', name: '主人公'),
     const CosplayCharacter(id: 'c2', genreId: 'g2', name: 'ライバル'),
-    const CosplayCharacter(id: 'c3', genreId: 'g1', name: '旧キャラ', archived: true),
+    const CosplayCharacter(
+      id: 'c3',
+      genreId: 'g1',
+      name: '旧キャラ',
+      archived: true,
+    ),
   ];
   final costumes = [
     const Costume(id: 's1', name: '制服', isGeneral: true),
     const Costume(id: 's2', name: '専用', isGeneral: false, characterId: 'c1'),
-    const Costume(id: 's3', name: '他キャラ専用', isGeneral: false, characterId: 'c2'),
+    const Costume(
+      id: 's3',
+      name: '他キャラ専用',
+      isGeneral: false,
+      characterId: 'c2',
+    ),
     const Costume(id: 's4', name: '旧衣装', isGeneral: true, archived: true),
   ];
 
   test('genre filters active characters by stable genre id', () {
-    expect(service.charactersForGenre(characters, genres.first).map((e) => e.id), ['c1']);
+    expect(
+      service.charactersForGenre(characters, genres.first).map((e) => e.id),
+      ['c1'],
+    );
   });
 
   test('character sees general and own costumes only', () {
-    expect(service.costumesForCharacter(costumes, characters.first).map((e) => e.id), ['s1', 's2']);
+    expect(
+      service.costumesForCharacter(costumes, characters.first).map((e) => e.id),
+      ['s1', 's2'],
+    );
   });
 
   test('archived masters remain resolvable for historical diary', () {

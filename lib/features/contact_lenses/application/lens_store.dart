@@ -8,22 +8,41 @@ class LensStore extends ChangeNotifier {
   final LensLedger ledger;
   int _sequence = 0;
 
-  String _id(String prefix) => '$prefix-${DateTime.now().microsecondsSinceEpoch}-${_sequence++}';
+  String _id(String prefix) =>
+      '$prefix-${DateTime.now().microsecondsSinceEpoch}-${_sequence++}';
 
-  LensProduct addProduct({required String name, required String manufacturer, required String color, required WearType type, int? periodDays}) {
+  LensProduct addProduct({
+    required String name,
+    required String manufacturer,
+    required String color,
+    required WearType type,
+    int? periodDays,
+  }) {
     final product = LensProduct(
-      id: _id('lens'), name: name, manufacturer: manufacturer, color: color,
-      wearType: type, openPeriodDays: periodDays,
+      id: _id('lens'),
+      name: name,
+      manufacturer: manufacturer,
+      color: color,
+      wearType: type,
+      openPeriodDays: periodDays,
     );
     ledger.products.add(product);
     notifyListeners();
     return product;
   }
 
-  LensPurchase addPurchase({required String productId, required DateTime purchasedOn, required int quantity, DateTime? expiresOn}) {
+  LensPurchase addPurchase({
+    required String productId,
+    required DateTime purchasedOn,
+    required int quantity,
+    DateTime? expiresOn,
+  }) {
     final purchase = LensPurchase(
-      id: _id('purchase'), productId: productId, purchasedOn: purchasedOn,
-      quantity: quantity, unopenedExpiresOn: expiresOn,
+      id: _id('purchase'),
+      productId: productId,
+      purchasedOn: purchasedOn,
+      quantity: quantity,
+      unopenedExpiresOn: expiresOn,
     );
     ledger.addPurchase(purchase);
     notifyListeners();

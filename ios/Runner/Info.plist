@@ -7,7 +7,9 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Cosplayers Diary</string>
+	<string>コスプレ日記</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>コスプレ日記に写真を登録するため、写真ライブラリを使用します。</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>

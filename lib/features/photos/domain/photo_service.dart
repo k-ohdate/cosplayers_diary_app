@@ -5,20 +5,30 @@ import '../../../core/services/file_store.dart';
 enum PhotoSaveMode { original, spaceSaving }
 
 class PhotoRecord {
-  const PhotoRecord({required this.id, required this.relativePath, required this.originalName});
+  const PhotoRecord({
+    required this.id,
+    required this.relativePath,
+    required this.originalName,
+  });
   final String id;
   final String relativePath;
   final String originalName;
 }
 
 abstract interface class ImageProcessor {
-  Future<Uint8List> resizeForStorage(Uint8List source, {required int maxLongEdge});
+  Future<Uint8List> resizeForStorage(
+    Uint8List source, {
+    required int maxLongEdge,
+  });
 }
 
 class PassthroughImageProcessor implements ImageProcessor {
   const PassthroughImageProcessor();
   @override
-  Future<Uint8List> resizeForStorage(Uint8List source, {required int maxLongEdge}) async => source;
+  Future<Uint8List> resizeForStorage(
+    Uint8List source, {
+    required int maxLongEdge,
+  }) async => source;
 }
 
 class PhotoService {
@@ -49,13 +59,19 @@ class PhotoService {
         // A stale orphan is safer than breaking the new database reference.
       }
     }
-    return PhotoRecord(id: id, relativePath: relativePath, originalName: originalName);
+    return PhotoRecord(
+      id: id,
+      relativePath: relativePath,
+      originalName: originalName,
+    );
   }
 
   String _safeExtension(String name) {
     final dot = name.lastIndexOf('.');
     if (dot < 0) return 'jpg';
     final value = name.substring(dot + 1).toLowerCase();
-    return const {'jpg', 'jpeg', 'png', 'webp', 'heic'}.contains(value) ? value : 'jpg';
+    return const {'jpg', 'jpeg', 'png', 'webp', 'heic'}.contains(value)
+        ? value
+        : 'jpg';
   }
 }

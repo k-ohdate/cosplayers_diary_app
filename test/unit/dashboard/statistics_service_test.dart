@@ -5,11 +5,40 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   const service = StatisticsService();
   final entries = [
-    DiaryEntry(id: 'd1', activityDate: DateTime(2026, 1, 1, 9), activityType: ActivityType.cosplay, genreId: 'g1', characterId: 'c1', costumeId: 's1'),
-    DiaryEntry(id: 'd2', activityDate: DateTime(2026, 1, 1, 18), activityType: ActivityType.cosplay, genreId: 'g1', characterId: 'c2', costumeId: 's2'),
-    DiaryEntry(id: 'd3', activityDate: DateTime(2026, 1, 1, 20), activityType: ActivityType.photographer),
-    DiaryEntry(id: 'd4', activityDate: DateTime(2026, 2, 2), activityType: ActivityType.photographer),
-    DiaryEntry(id: 'd5', activityDate: DateTime(2025, 3, 1), activityType: ActivityType.cosplay, genreId: 'g2', characterId: 'c1', costumeId: 's1'),
+    DiaryEntry(
+      id: 'd1',
+      activityDate: DateTime(2026, 1, 1, 9),
+      activityType: ActivityType.cosplay,
+      genreId: 'g1',
+      characterId: 'c1',
+      costumeId: 's1',
+    ),
+    DiaryEntry(
+      id: 'd2',
+      activityDate: DateTime(2026, 1, 1, 18),
+      activityType: ActivityType.cosplay,
+      genreId: 'g1',
+      characterId: 'c2',
+      costumeId: 's2',
+    ),
+    DiaryEntry(
+      id: 'd3',
+      activityDate: DateTime(2026, 1, 1, 20),
+      activityType: ActivityType.photographer,
+    ),
+    DiaryEntry(
+      id: 'd4',
+      activityDate: DateTime(2026, 2, 2),
+      activityType: ActivityType.photographer,
+    ),
+    DiaryEntry(
+      id: 'd5',
+      activityDate: DateTime(2025, 3, 1),
+      activityType: ActivityType.cosplay,
+      genreId: 'g2',
+      characterId: 'c1',
+      costumeId: 's1',
+    ),
   ];
 
   test('counts entries and unique activity dates separately', () {

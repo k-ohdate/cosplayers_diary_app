@@ -20,17 +20,25 @@ void main() {
   });
 
   test('rejects unsupported manifest version', () {
-    final bytes = service.create(const {}, createdAt: DateTime.utc(2026), formatVersion: 99);
+    final bytes = service.create(
+      const {},
+      createdAt: DateTime.utc(2026),
+      formatVersion: 99,
+    );
     expect(service.inspect(bytes).errors.join(), contains('バージョン'));
   });
 
   test('rejects traversal path before extraction', () {
-    final bytes = service.create({'../escape.txt': Uint8List(1)}, createdAt: DateTime.utc(2026));
+    final bytes = service.create({
+      '../escape.txt': Uint8List(1),
+    }, createdAt: DateTime.utc(2026));
     expect(service.inspect(bytes).errors.join(), contains('不正なパス'));
   });
 
   test('rejects excessive extracted size', () {
-    final bytes = service.create({'images/huge.jpg': Uint8List(2048)}, createdAt: DateTime.utc(2026));
+    final bytes = service.create({
+      'images/huge.jpg': Uint8List(2048),
+    }, createdAt: DateTime.utc(2026));
     expect(service.inspect(bytes).errors.join(), contains('サイズ'));
   });
 }

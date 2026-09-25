@@ -24,8 +24,12 @@ void main() {
     final result = service.validate(
       service.parse('id,date,count,genre_id\nd1,2026-99-01,-x,missing\n'),
       schema: const CsvSchema(
-        requiredColumns: {'id', 'date'}, dateColumns: {'date'}, integerColumns: {'count'},
-        references: {'genre_id': {'g1'}},
+        requiredColumns: {'id', 'date'},
+        dateColumns: {'date'},
+        integerColumns: {'count'},
+        references: {
+          'genre_id': {'g1'},
+        },
       ),
     );
     expect(result.errors, hasLength(3));
@@ -33,9 +37,21 @@ void main() {
 
   test('preview distinguishes add overwrite and replace', () {
     final rows = service.parse('id,name\ng1,new\ng2,two\n');
-    final append = service.preview(rows, existingIds: {'g1'}, mode: ImportMode.append);
-    final overwrite = service.preview(rows, existingIds: {'g1'}, mode: ImportMode.overwrite);
-    final replace = service.preview(rows, existingIds: {'g1', 'old'}, mode: ImportMode.replaceAll);
+    final append = service.preview(
+      rows,
+      existingIds: {'g1'},
+      mode: ImportMode.append,
+    );
+    final overwrite = service.preview(
+      rows,
+      existingIds: {'g1'},
+      mode: ImportMode.overwrite,
+    );
+    final replace = service.preview(
+      rows,
+      existingIds: {'g1', 'old'},
+      mode: ImportMode.replaceAll,
+    );
     expect((append.added, append.updated, append.deleted), (1, 0, 0));
     expect((overwrite.added, overwrite.updated), (1, 1));
     expect(replace.deleted, 1);

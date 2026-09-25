@@ -58,7 +58,12 @@ class LensInventory {
 }
 
 class LensUsage {
-  const LensUsage({required this.id, required this.diaryId, required this.inventoryId, required this.usedOn});
+  const LensUsage({
+    required this.id,
+    required this.diaryId,
+    required this.inventoryId,
+    required this.usedOn,
+  });
   final String id;
   final String diaryId;
   final String inventoryId;

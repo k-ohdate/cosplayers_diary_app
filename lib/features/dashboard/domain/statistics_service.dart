@@ -49,11 +49,21 @@ class StatisticsService {
     int unusedLensStock = 0,
     int expiringLensCount = 0,
   }) {
-    final entries = source.where((entry) => year == null || entry.activityDate.year == year).toList();
-    final cosplay = entries.where((entry) => entry.activityType == ActivityType.cosplay).toList();
-    final photographers = entries.where((entry) => entry.activityType == ActivityType.photographer).toList();
-    final cosplayDates = cosplay.map((entry) => _dateKey(entry.activityDate)).toSet();
-    final photographerDates = photographers.map((entry) => _dateKey(entry.activityDate)).toSet();
+    final entries = source
+        .where((entry) => year == null || entry.activityDate.year == year)
+        .toList();
+    final cosplay = entries
+        .where((entry) => entry.activityType == ActivityType.cosplay)
+        .toList();
+    final photographers = entries
+        .where((entry) => entry.activityType == ActivityType.photographer)
+        .toList();
+    final cosplayDates = cosplay
+        .map((entry) => _dateKey(entry.activityDate))
+        .toSet();
+    final photographerDates = photographers
+        .map((entry) => _dateKey(entry.activityDate))
+        .toSet();
     return ActivityStatistics(
       cosplayCount: cosplay.length,
       cosplayDays: cosplayDates.length,
@@ -72,22 +82,29 @@ class StatisticsService {
     );
   }
 
-  String _dateKey(DateTime value) => '${value.year.toString().padLeft(4, '0')}-${value.month.toString().padLeft(2, '0')}-${value.day.toString().padLeft(2, '0')}';
+  String _dateKey(DateTime value) =>
+      '${value.year.toString().padLeft(4, '0')}-${value.month.toString().padLeft(2, '0')}-${value.day.toString().padLeft(2, '0')}';
 
   Map<int, int> _months(Iterable<DiaryEntry> entries) => {
-        for (var month = 1; month <= 12; month++) month: entries.where((entry) => entry.activityDate.month == month).length,
-      };
+    for (var month = 1; month <= 12; month++)
+      month: entries.where((entry) => entry.activityDate.month == month).length,
+  };
 
   Map<String, int> _counts(Iterable<String?> values) {
     final result = <String, int>{};
     for (final value in values) {
-      if (value != null && value.isNotEmpty) result[value] = (result[value] ?? 0) + 1;
+      if (value != null && value.isNotEmpty) {
+        result[value] = (result[value] ?? 0) + 1;
+      }
     }
     return result;
   }
 
   List<RankingEntry> _ranking(Iterable<String?> values) {
-    final result = [for (final entry in _counts(values).entries) RankingEntry(entry.key, entry.value)];
+    final result = [
+      for (final entry in _counts(values).entries)
+        RankingEntry(entry.key, entry.value),
+    ];
     result.sort((a, b) {
       final count = b.count.compareTo(a.count);
       return count != 0 ? count : a.id.compareTo(b.id);

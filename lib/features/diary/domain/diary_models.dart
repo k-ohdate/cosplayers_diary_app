@@ -20,8 +20,8 @@ class DiaryEntry {
     this.lensInventoryId,
     DateTime? createdAt,
     DateTime? updatedAt,
-  })  : createdAt = createdAt ?? DateTime.now(),
-        updatedAt = updatedAt ?? DateTime.now();
+  }) : createdAt = createdAt ?? DateTime.now(),
+       updatedAt = updatedAt ?? DateTime.now();
 
   final String id;
   final DateTime activityDate;
@@ -48,16 +48,16 @@ class DiaryEntry {
     bool clearLens = false,
     DateTime? updatedAt,
   }) => DiaryEntry(
-        id: id ?? this.id,
-        activityDate: activityDate ?? this.activityDate,
-        activityType: activityType ?? this.activityType,
-        genreId: genreId ?? this.genreId,
-        characterId: characterId ?? this.characterId,
-        costumeId: costumeId ?? this.costumeId,
-        memo: memo ?? this.memo,
-        photoId: photoId ?? this.photoId,
-        lensInventoryId: clearLens ? null : lensInventoryId ?? this.lensInventoryId,
-        createdAt: createdAt,
-        updatedAt: updatedAt,
-      );
+    id: id ?? this.id,
+    activityDate: activityDate ?? this.activityDate,
+    activityType: activityType ?? this.activityType,
+    genreId: genreId ?? this.genreId,
+    characterId: characterId ?? this.characterId,
+    costumeId: costumeId ?? this.costumeId,
+    memo: memo ?? this.memo,
+    photoId: photoId ?? this.photoId,
+    lensInventoryId: clearLens ? null : lensInventoryId ?? this.lensInventoryId,
+    createdAt: createdAt,
+    updatedAt: updatedAt,
+  );
 }
