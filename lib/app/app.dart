@@ -83,7 +83,11 @@ class _AppShellState extends State<AppShell> {
       0 => CalendarPage(store: _diaryStore, masterStore: _masterStore),
       1 => DiaryListPage(store: _diaryStore, masterStore: _masterStore),
       2 => ManagementPage(masterStore: _masterStore, lensStore: _lensStore),
-      3 => DashboardPage(diaryStore: _diaryStore, lensStore: _lensStore),
+      3 => DashboardPage(
+        diaryStore: _diaryStore,
+        lensStore: _lensStore,
+        masterStore: _masterStore,
+      ),
       4 => SettingsPage(
         settingsStore: widget.settingsStore,
         persistence: _persistence,

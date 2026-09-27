@@ -4,6 +4,7 @@
 .packages
 .pub-cache/
 .tools/
+.vercel/
 /build/
 /coverage/
 android/.gradle/
@@ -13,3 +14,4 @@ ios/Flutter/ephemeral/
 .idea/
 .vscode/
 flutter_*.log
+.env.local

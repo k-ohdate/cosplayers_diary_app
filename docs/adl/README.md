@@ -10,7 +10,7 @@ ADL（Agent Documentation Layer）は、Codexなどの実装エージェント�
 - SDK宣言: Dart `^3.13.3`
 - 構成: Flutter + Material 3 + SQLite（ネイティブ）/ブラウザストレージ（PWA）+ ローカルファイル
 - 規模: `lib/` と `test/` に約4,000行のDartコード
-- CI/CD: GitHub Pages向けPWAの解析・テスト・ビルド・公開ワークフローを配置
+- CI/CD: Vercel向けPWAの解析・テスト・ビルド・本番公開ワークフローを配置
 
 このスナップショット以降にコードが変わっている場合、コードとテストを正としてこの文書を更新します。
 
@@ -47,7 +47,7 @@ ADL（Agent Documentation Layer）は、Codexなどの実装エージェント�
 | カラコン製品・購入 | 済 | 済 | 済 | 製品と数量の追加が可能 |
 | カラコン実物・使用 | 済 | 未接続 | 済 | 開封/使用ロジックはあるが日記フォームから操作不可 |
 | 写真保存・縮小 | 済 | 未接続 | 未接続 | サービス単体のみ。写真メタデータもアプリ状態に未登録 |
-| 統計 | 済 | 一部 | 状態から再計算 | 主要指標とキャラクター上位のみ表示。ランキング表示はID |
+| 統計 | 済 | 一部 | 状態から再計算 | 主要指標とキャラクター上位を表示。キャラクター名はマスターから解決 |
 | CSV | 解析・検証・出力済 | 未接続 | ZIPへ出力 | 単独CSVインポートやCSVからの状態復元は未実装 |
 | ZIPバックアップ | 済 | 済 | 済 | `app_state.json` を復元の正本に使用。画像はまだ同梱されない |
 | SQLite正規化テーブル | スキーマ済 | 対象外 | 未接続 | 通常保存は `settings` 内JSONのみ |
@@ -62,4 +62,4 @@ ADL（Agent Documentation Layer）は、Codexなどの実装エージェント�
 
 ## 調査時の検証結果
 
-Flutter 3.47.5 / Dart 3.13.4で、フォーマット差分なし、`flutter analyze` 指摘なし、全41テスト成功を確認しました。GitHub Pages用ベースパスを指定したrelease Webビルドも成功し、独自Service Workerのプリキャッシュ対象がすべて成果物に含まれることを確認しています。
+Flutter 3.47.5 / Dart 3.13.4で、フォーマット差分なし、`flutter analyze` 指摘なし、全42テスト成功を確認しました。Vercelのルートパス向けrelease Webビルドも成功し、独自Service Workerのプリキャッシュ対象がすべて成果物に含まれることを確認しています。`cosplayers-diary-app` の本番デプロイは `https://cosplayers-diary-app.vercel.app` で公開されています。

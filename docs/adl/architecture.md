@@ -90,7 +90,9 @@ Webとネイティブは同じJSON表現とZIPバックアップ形式を使用�
 
 ## PWA配信
 
-`web/manifest.json` がホーム画面名、テーマ色、通常/マスカブルアイコンを定義します。Flutter自動生成Service Workerには依存せず、`web/app_service_worker.js` が同一オリジンのアプリシェルと実行時取得リソースをキャッシュします。`web/flutter_bootstrap.js` はService Workerを登録し、CanvasKitを同梱ファイルから読み込むため、初回オンライン起動後はオフラインでも起動できます。GitHub Pages用のワークフローは `.github/workflows/deploy-pwa.yml` で、リポジトリ配下のベースパスをビルド時に自動指定します。
+`web/manifest.json` がホーム画面名、テーマ色、通常/マスカブルアイコンを定義します。Flutter自動生成Service Workerには依存せず、`web/app_service_worker.js` が同一オリジンのアプリシェルと実行時取得リソースをキャッシュします。`web/flutter_bootstrap.js` はService Workerを登録し、CanvasKitを同梱ファイルから読み込むため、初回オンライン起動後はオフラインでも起動できます。
+
+Vercelではドメイン直下用に `--base-href /` でビルドし、`tool/prepare_vercel_output.mjs` が `build/web` をBuild Output API形式の `.vercel/output/static` へ変換します。`.github/workflows/deploy-pwa.yml` は検証後に `cosplayers-diary-app` のProductionへprebuilt成果物をデプロイします。公開URLは `https://cosplayers-diary-app.vercel.app` です。
 
 ## SQLite
 

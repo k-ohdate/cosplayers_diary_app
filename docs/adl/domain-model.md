@@ -103,7 +103,7 @@ DiaryEntry ── Genre / CosplayCharacter / Costume / PhotoRecord / LensInvento
 - ジャンル/キャラクター/衣装ランキングは件数降順、同数ならID昇順、上位5件。
 - カラコン利用製品ID、未使用在庫、期限間近件数は呼び出し側から渡す。
 
-現行ダッシュボードはキャラクターランキングを名前へ解決せずIDで表示し、`expiringLensCount` も算出していません。
+現行ダッシュボードはキャラクターランキングのIDをマスターデータの名前へ解決して表示します。参照先が存在しない破損データでは「不明なキャラクター」と表示します。`expiringLensCount` はまだ算出していません。
 
 ## CSV
 

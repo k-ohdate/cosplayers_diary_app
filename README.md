@@ -94,20 +94,24 @@ flutter build ipa --release
 
 ### Web / PWA
 
+本番公開URL: <https://cosplayers-diary-app.vercel.app>
+
 ```sh
 flutter run -d chrome
-flutter build web --release --pwa-strategy=none
+flutter build web --release --pwa-strategy=none --base-href /
 ```
 
-生成物は `build/web` です。PWA機能とブラウザ保存を正しく動かすため、公開時はHTTPSで配信してください（`localhost` での開発は例外です）。サブディレクトリへ公開する場合は、次のように末尾の `/` を含むベースパスを指定します。
+生成物は `build/web` です。PWA機能とブラウザ保存を正しく動かすため、公開時はHTTPSで配信してください（`localhost` での開発は例外です）。Vercelではドメイン直下へ公開するため、`--base-href /` を指定します。
 
 ```sh
-flutter build web --release --pwa-strategy=none --base-href /cosplayers_diary_app/
+node tool/verify_pwa.mjs build/web
+node tool/prepare_vercel_output.mjs build/web
+npx --yes --package vercel@60.1.3 vercel deploy --prebuilt --prod
 ```
 
 Web版のアプリ状態は同じ `app_state_v1` JSONをブラウザのローカルストレージへ保存します。ネイティブ版のSQLiteをWebから直接開くことはできないため、端末間の移行には設定画面のZIPバックアップ作成・復元を使用してください。Safariの「履歴とWebサイトデータを消去」などでブラウザ保存が削除されるため、定期バックアップを推奨します。
 
-GitHub Pagesへの公開ワークフローは [`.github/workflows/deploy-pwa.yml`](.github/workflows/deploy-pwa.yml) にあります。GitHubのリポジトリ設定で Pages のSourceを「GitHub Actions」に変更すると、`develop` へのpushまたは手動実行で、リポジトリ名を含むベースパスへ自動ビルド・公開します。
+Vercelへの公開ワークフローは [`.github/workflows/deploy-pwa.yml`](.github/workflows/deploy-pwa.yml) にあります。GitHub ActionsのRepository secretsへ `VERCEL_TOKEN`、`VERCEL_ORG_ID`、`VERCEL_PROJECT_ID` を登録すると、`develop` へのpushまたは手動実行で解析・テスト・PWA検証後に本番公開します。Vercelプロジェクト名は `cosplayers-diary-app` です。
 
 iPhoneではSafariで公開URLを開き、共有メニューから「ホーム画面に追加」を選択します。初回表示と更新取得にはネット接続が必要ですが、その後はキャッシュ済みのアプリをオフラインで起動できます。
 
