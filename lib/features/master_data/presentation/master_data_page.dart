@@ -131,8 +131,9 @@ class _MasterDataPageState extends State<MasterDataPage>
     } else if (_tabs.index == 2) {
       widget.store.addCostume(name, isGeneral: true);
     } else if (mounted) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('先にジャンルを登録してください')));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('先にジャンルを登録してください')));
     }
   }
 }

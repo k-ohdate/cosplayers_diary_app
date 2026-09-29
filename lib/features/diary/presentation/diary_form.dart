@@ -184,8 +184,9 @@ class _DiaryFormState extends State<DiaryForm> {
       widget.store.save(entry);
       Navigator.pop(context);
     } on ArgumentError catch (error) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(error.message.toString())));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(error.message.toString())));
     }
   }
 }
