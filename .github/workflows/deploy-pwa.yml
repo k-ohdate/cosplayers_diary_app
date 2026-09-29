@@ -31,7 +31,8 @@ jobs:
       - run: dart format --output=none --set-exit-if-changed lib test
       - run: flutter analyze
       - run: flutter test
-      - run: flutter build web --release --pwa-strategy=none --base-href /
+      - run: node --test tool/project_storage_test.mjs
+      - run: flutter build web --release --pwa-strategy=none --base-href / --dart-define=GOOGLE_OAUTH_CLIENT_ID=${{ vars.GOOGLE_OAUTH_CLIENT_ID }}
       - run: node --check web/app_service_worker.js
       - run: node tool/verify_pwa.mjs build/web
       - run: node tool/prepare_vercel_output.mjs build/web

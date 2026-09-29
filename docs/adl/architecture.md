@@ -74,6 +74,7 @@ Presentation
       └─ AppStatePersistenceが250msデバウンス
           → 全ストアをJSON化
           → SettingsStore(key='app_state_v1')へ保存
+          → 接続中のPWAプロジェクトファイルまたはGoogle Driveへ保存
 ```
 
 アプリ起動時は逆方向に、JSONを読み、3ストアが保持する公開Listを `clear` + `addAll` で復元します。`AppShell.dispose()` は保留中タイマーを止めた後、最終状態を保存します。
@@ -87,6 +88,12 @@ Presentation
 正規化テーブルへの保存を追加する場合は、JSONとの二重書き込みを安易に増やさず、どちらを正本にするかと移行/ロールバックを先に決めます。
 
 Webとネイティブは同じJSON表現とZIPバックアップ形式を使用します。ただしブラウザのサンドボックスからiOSアプリのSQLiteへ直接アクセスできないため、両者間のデータ移行は設定画面のZIP作成・復元で行います。Webの保存領域は公開オリジンごとに分離され、ブラウザデータ削除の対象です。
+
+### PWAプロジェクト保存
+
+`ProjectSyncController` が外部保存先と前回のrevisionを保持します。設定画面で利用者が明示的にローカルファイルまたはGoogle Driveを接続すると、`AppStatePersistence.onSaved` から同じJSONを外部へ書きます。外部保存に失敗してもブラウザ内の `app_state_v1` は保持し、外部自動保存を停止します。再接続時に端末側か保存先側かを選びます。保存先JSONは一時ストアで形式を検査してから既存ストアへ復元します。
+
+Web実装は `web/project_storage.js` と `project_storage_web.dart` のJS interopです。ローカルファイルはFile System Access APIの選択済みhandleをIndexedDBに保存します。Google DriveはGoogle Identity Servicesのtoken modelと `drive.file` scopeを使い、アプリが作る `CosplayDiary/CosplayDiary.project.json` をREST APIで読み書きします。アクセストークンはメモリ内だけに置きます。両保存先とも書き込み直前に外部の内容またはversionを確認します。Driveの取得と更新は別リクエストなので、同時更新の完全な原子性はありません。ネイティブではプロジェクト保存機能を公開せず、既存のSQLite/ZIPを利用します。
 
 ## PWA配信
 
@@ -159,4 +166,4 @@ ZIP bytes
 | `csv` | 依存宣言はあるが、現行 `CsvService` は独自パーサー/エンコーダー |
 | `share_plus` | 依存宣言はあるが、現行コードでは未使用 |
 
-ネットワーク、認証、クラウド同期、分析SDKへの依存はありません。
+通常利用にネットワークや認証は不要です。任意のPWA Google Drive連携時のみGoogle Identity ServicesとDrive REST APIを使用します。分析SDKはありません。

@@ -11,6 +11,8 @@ import '../features/contact_lenses/application/lens_store.dart';
 import '../features/master_data/presentation/management_page.dart';
 import '../features/dashboard/presentation/dashboard_page.dart';
 import '../core/database/app_state_persistence.dart';
+import '../core/database/project_storage.dart';
+import '../core/database/project_sync_controller.dart';
 import '../core/database/settings_store.dart';
 import '../features/settings/presentation/settings_page.dart';
 
@@ -41,6 +43,7 @@ class _AppShellState extends State<AppShell> {
   final _diaryStore = DiaryStore();
   final _lensStore = LensStore();
   AppStatePersistence? _persistence;
+  ProjectSyncController? _projectSync;
   bool _loading = false;
 
   @override
@@ -54,19 +57,30 @@ class _AppShellState extends State<AppShell> {
         diary: _diaryStore,
         lenses: _lensStore,
       );
+      _projectSync = ProjectSyncController(
+        persistence: _persistence!,
+        settings: widget.settingsStore!,
+        storage: createProjectStorage(),
+      );
       unawaited(_load());
     }
   }
 
   Future<void> _load() async {
     await _persistence!.load();
+    await _projectSync!.loadPreference();
+    await _projectSync!.tryResumeLocalFile();
     _persistence!.attach();
     if (mounted) setState(() => _loading = false);
   }
 
   @override
   void dispose() {
-    if (_persistence != null) unawaited(_persistence!.dispose());
+    if (_persistence != null) {
+      unawaited(
+        _persistence!.dispose().whenComplete(() => _projectSync?.dispose()),
+      );
+    }
     _masterStore.dispose();
     _diaryStore.dispose();
     _lensStore.dispose();
@@ -91,6 +105,8 @@ class _AppShellState extends State<AppShell> {
       4 => SettingsPage(
         settingsStore: widget.settingsStore,
         persistence: _persistence,
+        projectSync: _projectSync,
+        onProjectLoaded: () => setState(() {}),
       ),
       _ => PlaceholderFeaturePage(title: pageTitles[_index]),
     };

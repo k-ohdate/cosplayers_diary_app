@@ -131,3 +131,4 @@ DiaryEntry ── Genre / CosplayCharacter / Costume / PhotoRecord / LensInvento
 | `app_state_v1` | 3ストア全体のJSON |
 | `last_backup_at` | ISO 8601日時 |
 | `photo_save_mode` | `original` または `spaceSaving` |
+| `project_target_v1` | PWAで最後に選んだ `localFile` または `googleDrive`。起動後は再接続が必要 |
