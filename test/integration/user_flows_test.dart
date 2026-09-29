@@ -63,70 +63,67 @@ void main() {
     expect(lenses.ledger.unusedCount(purchase.id), 1);
   });
 
-  test(
-    'D: ZIP backup restores masters diary and lens inventory into empty database',
-    () async {
-      final firstDb = await AppDatabase.open(
-        path: inMemoryDatabasePath,
-        factory: databaseFactoryFfi,
-      );
-      final masters = MasterDataStore()..addGenre('作品');
-      final diaries = DiaryStore()
-        ..save(
-          DiaryEntry(
-            id: 'd1',
-            activityDate: DateTime(2026, 1, 1),
-            activityType: ActivityType.other,
-          ),
-        );
-      final lenses = LensStore();
-      final product = lenses.addProduct(
-        name: 'Blue',
-        manufacturer: 'M',
-        color: '青',
-        type: WearType.monthly,
-        periodDays: 30,
-      );
-      lenses.addPurchase(
-        productId: product.id,
-        purchasedOn: DateTime(2026, 1, 1),
-        quantity: 2,
-      );
-      final first = AppStatePersistence(
-        store: firstDb,
-        masters: masters,
-        diary: diaries,
-        lenses: lenses,
-      );
-      final zip = BackupCoordinator(first).create(DateTime.utc(2026, 1, 2));
-      await firstDb.close();
-
-      final secondDb = await AppDatabase.open(
-        path: inMemoryDatabasePath,
-        factory: databaseFactoryFfi,
-      );
-      final restoredMasters = MasterDataStore();
-      final restoredDiaries = DiaryStore();
-      final restoredLenses = LensStore();
-      final second = AppStatePersistence(
-        store: secondDb,
-        masters: restoredMasters,
-        diary: restoredDiaries,
-        lenses: restoredLenses,
-      );
-      final result = await BackupCoordinator(second).restore(zip);
-      expect(result.isValid, isTrue);
-      expect(
-        (
-          restoredMasters.genres.length,
-          restoredDiaries.entries.length,
-          restoredLenses.ledger.purchases.length,
+  test('D: ZIP backup restores masters diary and lens inventory into empty database', () async {
+    final firstDb = await AppDatabase.open(
+      path: inMemoryDatabasePath,
+      factory: databaseFactoryFfi,
+    );
+    final masters = MasterDataStore()..addGenre('作品');
+    final diaries = DiaryStore()
+      ..save(
+        DiaryEntry(
+          id: 'd1',
+          activityDate: DateTime(2026, 1, 1),
+          activityType: ActivityType.other,
         ),
-        (1, 1, 1),
       );
-      await secondDb.close();
-    },
-  );
+    final lenses = LensStore();
+    final product = lenses.addProduct(
+      name: 'Blue',
+      manufacturer: 'M',
+      color: '青',
+      type: WearType.monthly,
+      periodDays: 30,
+    );
+    lenses.addPurchase(
+      productId: product.id,
+      purchasedOn: DateTime(2026, 1, 1),
+      quantity: 2,
+    );
+    final first = AppStatePersistence(
+      store: firstDb,
+      masters: masters,
+      diary: diaries,
+      lenses: lenses,
+    );
+    final zip = BackupCoordinator(first).create(DateTime.utc(2026, 1, 2));
+    await firstDb.close();
+
+    final secondDb = await AppDatabase.open(
+      path: inMemoryDatabasePath,
+      factory: databaseFactoryFfi,
+    );
+    final restoredMasters = MasterDataStore();
+    final restoredDiaries = DiaryStore();
+    final restoredLenses = LensStore();
+    final second = AppStatePersistence(
+      store: secondDb,
+      masters: restoredMasters,
+      diary: restoredDiaries,
+      lenses: restoredLenses,
+    );
+    final result = await BackupCoordinator(second).restore(zip);
+    expect(result.isValid, isTrue);
+    expect(
+      (
+        restoredMasters.genres.length,
+        restoredDiaries.entries.length,
+        restoredLenses.ledger.purchases.length,
+      ),
+      (1, 1, 1),
+    );
+    await secondDb.close();
+  });
 
   test('E: cosplay and photographer on same date aggregate independently', () {
     final entries = [

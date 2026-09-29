@@ -218,9 +218,8 @@ class _SettingsPageState extends State<SettingsPage> {
     );
     if (mounted) {
       setState(() => _lastBackup = now);
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('バックアップを保存しました')));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text('バックアップを保存しました')));
     }
   }
 
@@ -248,14 +247,12 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
     );
     if (confirmed != true) return;
-    final result = await BackupCoordinator(
-      widget.persistence!,
-    ).restore(await picked.readAsBytes());
+    final result = await BackupCoordinator(widget.persistence!)
+        .restore(await picked.readAsBytes());
     if (!mounted) return;
     final message = result.isValid ? '復元しました' : result.errors.join('\n');
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(message)));
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
     setState(() {});
   }
 
@@ -353,8 +350,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   void _showProjectMessage(String message) {
     if (!mounted) return;
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(message)));
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
   }
 }
